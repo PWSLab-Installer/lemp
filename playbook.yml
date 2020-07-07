@@ -44,8 +44,7 @@
       ignore_errors: yes
 
     - name: Check the version of CentOS
-      shell: |
-        cat: /etc/centos-release
+      command: cat /etc/centos-release
       register: cent_os
       ignore_errors: yes
 
@@ -57,7 +56,7 @@
 
     - name: Applying replacement on CentOS
       lineinfile:
-          dest: ~/.ansible/roles/geerlingguy.php/vars/Debian.yml
+          dest: ~/.ansible/roles/pwslab.php/vars/Debian.yml
           regexp: '^__php_webserver_daemon: '
           line: '__php_webserver_daemon: "nginx"'
           state: present
@@ -66,7 +65,7 @@
     
     - name: Applying replacement on Ubuntu
       lineinfile:
-          dest: ~/.ansible/roles/geerlingguy.php/vars/Debian.yml
+          dest: ~/.ansible/roles/pwslab.php/vars/Debian.yml
           regexp: '^__php_webserver_daemon: '
           line: '__php_webserver_daemon: "nginx"'
           state: present
