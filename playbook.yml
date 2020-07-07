@@ -16,6 +16,33 @@
     - name: Install Role PHP
       local_action: command ansible-galaxy install -f geerlingguy.php
 
+    - name: Check if Nginx is already installed
+      stat: path=/usr/sbin/nginx
+      register: nginx_exists
+
+    - name: Check if PHP is already installed
+      stat: path=/usr/bin/php
+      register: php_exists
+
+    - name: Check if MYSQL is already installed
+      stat: path=/usr/bin/mysql
+      register: mysql_exists
+
+    - name: Applying role Nginx
+      command: mv ~/.ansible/roles/geerlingguy.nginx ~/.ansible/roles/pwslab.nginx
+      when: not nginx_exists.stat.exists
+      ignore_errors: yes
+
+    - name: Applying role PHP
+      command: mv ~/.ansible/roles/geerlingguy.php ~/.ansible/roles/pwslab.php
+      when: not php_exists.stat.exists
+      ignore_errors: yes
+
+    - name: Applying role MYSQL
+      command: mv ~/.ansible/roles/geerlingguy.mysql ~/.ansible/roles/pwslab.mysql
+      when: not mysql_exists.stat.exists
+      ignore_errors: yes
+
     - name: Check the version of CentOS
       shell: |
         cat: /etc/centos-release
@@ -48,12 +75,15 @@
 
     - name: Installing NGINX
       include_role:
-        name: geerlingguy.nginx
+        name: pwslab.nginx
+      when: not nginx_exists.stat.exists
     
     - name: Installing MYSQL
       include_role:
-          name: geerlingguy.mysql
+          name: pwslab.mysql
+      when: not mysql_exists.stat.exists
 
     - name: Installing PHP
       include_role:
-          name: geerlingguy.php
+          name: pwslab.php
+      when: not php_exists.stat.exists
