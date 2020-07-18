@@ -8,14 +8,7 @@
   # Roles are imported from ansible
 
   tasks:
-      
-    - name: Fetch Custom NGINX Role
-      git:
-        repo: https://ro:2QcMcsAwXiQAWqFEdqwC@pwslab.org/ansible/lemp-playbook.git
-        dest: /root/.ansible/roles/pwslab.nginx-custom
-        version: master
-        force: yes
-    
+        
     - name: Install Role NGINX
       local_action: command ansible-galaxy install -f geerlingguy.nginx 
 
@@ -91,7 +84,7 @@
 
     - name: Installing NGINX
       include_role:
-        name: pwslab.nginx-custom
+        name: pwslab.nginx
       when: 
         - not nginx_exists.stat.exists
         - cent_os.stdout | regex_search("CentOS Linux release 8")
@@ -101,7 +94,7 @@
             server_name: "localhost"
             root: "/usr/share/nginx/html"
             index: "index.php index.html index.htm"
-            template: "{{ playbook_dir }}/templates/default.conf.j2"
+            # template: "{{ playbook_dir }}/templates/default.conf.j2"
 
     - name: Installing NGINX
       include_role:
